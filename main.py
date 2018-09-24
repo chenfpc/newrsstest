@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import svm
 import function_simulate as f_sim
-
+import nativebyes as byes
 import kalman_filter as k
 
 BASE_URL = r"d:\范师兄材料\data\\"
@@ -71,15 +71,11 @@ classfication = f.runClassfication(originalTrainingSet, cordinaryAllSet)       #
 # 在每个子区域中在进行kemans
 clusters = f.getClusters(classfication, 4)                 # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 
-# 以下是自己写的
-# 调用卡尔曼滤波方法！！！！！！！！！！！！！！！！！！！！
-# h_testAll = H_BASE_URL + 'Htest_All.txt'
-# h_testAll = np.loadtxt(h_testAll, dtype=int)
-# r = k.all_kalman_filter(h_testAll)
-# 自己写的结束
+bayes = byes.NaiveBayesContinuous()
+
 
 # cluster-knn(包括knn和wknn),kmeans-knn/wknn
-f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication, clusters, 0, clf)     # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
+f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication, clusters, 0, clf,bayes)     # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 # knn
 # f.runKnnRealityKNN(trainingSet, testingSet, cordinaryAllSet, cordinaryTestSet, 5, 0)          # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 
