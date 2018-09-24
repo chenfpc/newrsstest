@@ -616,7 +616,7 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
 
         # 以下代码开始给位置加权重
 
-        w =  (weight_wifi1 + weight_wifi2 + weight_wifi3)*5
+        w = (weight_wifi1 + weight_wifi2 + weight_wifi3)*5
         w_B = (w1 +w2+w3) *2
         w_All = w + w_B
         weight = np.array([w, w_B, w_All])
