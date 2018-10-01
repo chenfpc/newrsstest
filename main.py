@@ -13,7 +13,7 @@ import function_simulate as f_sim
 import nativebyes as byes
 import kalman_filter as k
 
-BASE_URL = r"c:\范师兄材料\data\\"
+BASE_URL = r"/Users/fanpengchen/资料/范师兄材料/data/"
 H_BASE_URL = r"C:\Users\Admin\Desktop\data2\\"
 
 # 真实情况的代码！！！！！！！！！！！！！！！！！！！！！！！！！！
@@ -74,10 +74,10 @@ clusters = f.getClusters(classfication, 4)                 # 调用了函数！�
 trainingByesData = f.getCategoryForBayes()
 bayes = byes.NaiveBayesContinuous()
 bayes.getPredictions(trainingByesData,originalTestingSet)
-print(bayes.getAccuracy())
+
 
 # cluster-knn(包括knn和wknn),kmeans-knn/wknn
-#f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication,  0, clf,bayes)     # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
+f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication,  0, clf,bayes)     # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 # knn
 # f.runKnnRealityKNN(trainingSet, testingSet, cordinaryAllSet, cordinaryTestSet, 5, 0)          # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 

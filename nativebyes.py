@@ -12,8 +12,11 @@ import pandas as pd
 class NaiveBayesContinuous():
     # 获取训练集每个特征的均值和方差以及类标签的取值集合
     def getMeanStdLabel(self, train_data_np):
+        totalSize = len(train_data_np)
         train_data = pd.DataFrame(train_data_np,
-                               columns=["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","label"])
+                               columns=["1","2","3","4","5","6","7","8","9",
+                                        "10","11","12","13","14","15","16",
+                                        "17","18","19","20","21","22","23","24","label"])
         label_counts = train_data.label.value_counts()
         label_arr = np.array(label_counts.index)
         label_arr.sort()
@@ -33,6 +36,7 @@ class NaiveBayesContinuous():
                 means_temp = np.array(names['c%s' % j])
                 names['mc%s' % j].append(np.mean(means_temp[:, k]))
                 names['sc%s' % j].append(np.std(means_temp[:, k], ddof=1))
+            names['mc%s' % j].append(label_counts[j] / totalSize)
 
         for x in range(len(label_arr)):
             c_mean.append(names['mc%s' % x])
@@ -49,12 +53,18 @@ class NaiveBayesContinuous():
     # 计算连续数据所属类的概率
     def CalcuClassProbCon(self, arr, cx_mean, cx_std):
         cx_probabilities = 1
-        for i in range(len(cx_mean)):
+        # 这里直接计算前面24个属性的乘积，再诚意cx_mean[25],也就是该类的概率
+        for i in range(len(cx_mean)-1):
             cx_probabilities *= self.CalcuGaussProb(arr[i], cx_mean[i], cx_std[i])
+        cx_probabilities = cx_probabilities * cx_mean[len(cx_mean) - 1]
         return cx_probabilities
 
     # 单一样本预测
     def predict(self, trainData, testData):
+        """
+        :param trainData: 所有的训练样本
+        :param testData: 单个训练的样本
+        """
         prob = []
         # print(trainData)
         self.cmean, self.cstd, self.label_array = self.getMeanStdLabel(trainData)

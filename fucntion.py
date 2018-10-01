@@ -36,7 +36,7 @@ import matplotlib.pylab as plt
 
 
 def getCategoryForBayes():
-    dataFileName = r'C:\范师兄材料\data\all.txt'
+    dataFileName = r'/Users/fanpengchen/资料/范师兄材料/data/all.txt'
     originalData = np.loadtxt(dataFileName)
     result = np.zeros((467,25))
     x1 = np.array([0]*126).reshape((126,1))
@@ -404,8 +404,8 @@ def calculateCordinary(k, data, point, index, positions_test, ifweight, original
     :return 返回和实际位置的误差，以及预测坐标
     """
     result = knn(point, data, k, ifweight, originalPoint)
-    result = (result - positions_test[index]) ** 2
-    error = result.sum(axis=0) ** 0.5
+    error = (result - positions_test[index]) ** 2
+    error = error.sum(axis=0) ** 0.5
     # print(error)
     count = 0
     if (error > 2):  # 输出误差大于2的预测坐标和真实坐标
