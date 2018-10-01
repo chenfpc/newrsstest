@@ -6,11 +6,14 @@ Created on Sun Aug 12 12:15:01 2018
 """
 
 import numpy as np
+import pandas as pd
 
 
 class NaiveBayesContinuous():
     # 获取训练集每个特征的均值和方差以及类标签的取值集合
-    def getMeanStdLabel(self, train_data):
+    def getMeanStdLabel(self, train_data_np):
+        train_data = pd.DataFrame(train_data_np,
+                               columns=["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","label"])
         label_counts = train_data.label.value_counts()
         label_arr = np.array(label_counts.index)
         label_arr.sort()

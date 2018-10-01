@@ -29,22 +29,27 @@ import matplotlib.pylab as plt
 """
  0 n n n
  1 y n n
- 2 n y y
+ 2 n y n
+ 3 n y y 
+ 4 n n y 
 """
+
+
 def getCategoryForBayes():
-    dataFileName = r'D:\范师兄材料\data\all.txt'
+    dataFileName = r'C:\范师兄材料\data\all.txt'
     originalData = np.loadtxt(dataFileName)
-    for i in range(126):
-        originalData = np.concatenate((originalData[0:126],0),axis=0)
-    for i in range(91):
-        originalData = np.concatenate((originalData[126:217],1),axis=0)
-    for i in range(138):
-        originalData = np.concatenate((originalData[217:355],2),axis=0)
-    for i in range(112):
-        originalData = np.concatenate((originalData[355:467],2),axis=0)
-    return originalData
-
-
+    result = np.zeros((467,25))
+    x1 = np.array([0]*126).reshape((126,1))
+    result[0:126] = np.concatenate((originalData[0:126,:], x1), axis=1)
+    x2=np.array([1]*91).reshape((91,1))
+    result[126:217, :] = np.concatenate((originalData[126:217,:], x2), axis=1)
+    x3=np.array([2]*70).reshape(70,1)
+    result[217:287, :] = np.concatenate((originalData[217:287,:], x3), axis=1)
+    x4 = np.array([3] * 68).reshape(68, 1)
+    result[287:355, :] = np.concatenate((originalData[287:355, :], x4), axis=1)
+    x5=np.array([4]*112).reshape(112,1)
+    result[355:467, :] = np.concatenate((originalData[355:467,:], x5), axis=1)
+    return result
 
 
 def getRgression(data2_4, data1_2_4, data2_2_4, distance, data5, data1_5, data2_5):  # 此函数没有被用到
@@ -269,7 +274,7 @@ def runCluster(dataSet, numbers):
 
 
 def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication,
-                         clusters, ifweight, clf):
+                         ifweight, clf, bayes):
     """
     :param trainingSet: 归一化后的训练集
     :param testingSet:  归一化后的测试机
@@ -283,8 +288,10 @@ def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryA
     """
     # 选择给RSS加权重需要改变 testingSet
     testingSet_cordinary = np.column_stack((testingSet, cordinaryTestSet))  # 将RSS值和位置信息合并在一起
-    result = clusterKNN(testingSet_cordinary, originalTestingSet, cordinaryTestSet, classfication, clusters, ifweight,
-                          clf)
+    trainingByesData = getCategoryForBayes()
+    result = clusterKNN(testingSet_cordinary, trainingByesData, originalTestingSet, cordinaryTestSet, classfication,
+                        ifweight,
+                        clf, bayes)
     print("平均误差为")
     print(result[0])
     return result[1]
@@ -469,7 +476,8 @@ def knn(testPoint, dataset, k, ifWeight, originalPoint):
             return sumx / k, sumy / k
 
 
-def clusterKNN(testData, trainingByesData,originalTestSet, positions_test, classfication, clusters, ifweight, clf,byes):
+def clusterKNN(testData, trainingByesData, originalTestSet, positions_test, classfication, ifweight, clf,
+               byes):
     """
     聚类KNN或者wknn
     :param testData: 训练集，包含数据和坐标（处理好的数据）
@@ -491,20 +499,19 @@ def clusterKNN(testData, trainingByesData,originalTestSet, positions_test, class
     for i in range(len1):
         which_class = judgeCluster(originalTestSet[i][:], classfication)  # 这里判断出子区域是哪一个，是A、B、C、D等，每一行都是（2.4g,5g)这样的特征值。
         class_data = (which_class[0])[0]  # 对应子区域中的所有数据
-        result, proby = byes.predict(trainingByesData, testdata[i])
-        if(tag==0):
-            w1=0
-            w2=4
-            w3=8
-        if(tag==1):
-            w1=12
-            w2=4
-            w3=8
-        if(tag==2):
-            w1=0
-            w2=16
-            w3=20
-
+        tag, proby = byes.predict(trainingByesData, originalTestSet[i])
+        if (tag == 0):
+            w1 = 0
+            w2 = 4
+            w3 = 8
+        if (tag == 1):
+            w1 = 12
+            w2 = 4
+            w3 = 8
+        if (tag == 2):
+            w1 = 0
+            w2 = 16
+            w3 = 20
 
         metric = [w1, w2, w3, 24, 25]
         dataSet = class_data[:, metric]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号
@@ -551,7 +558,6 @@ def clusterKNN(testData, trainingByesData,originalTestSet, positions_test, class
         predict_cordinary[i] = result[1]
         # fileObject.close()
     return error / len(positions_test), predict_cordinary
-
 
 # def clusterKNN(testData, originalTestSet, positions_test, classfication,clusters,ifweight,clf):
 #     """

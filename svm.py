@@ -7,7 +7,7 @@ def print_svm_score():
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.metrics import accuracy_score
-    dataFileName = r'D:\范师兄材料\data\all5.txt'
+    dataFileName = r'C:\范师兄材料\data\all5.txt'
     originalData = np.loadtxt(dataFileName)
     label = []
     newData = originalData[126:217, 0:4]
@@ -46,7 +46,7 @@ def print_simulate_svm_score():
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.metrics import accuracy_score
-    dataFileName = r'D:\范师兄材料\data\1.mat'
+    dataFileName = r'C:\范师兄材料\data\1.mat'
     originalData = sio.loadmat(dataFileName)["tempx"]
     label = []
 
