@@ -345,7 +345,7 @@ def judge(testPoint):
     return result
 
 
-def judgeCluster_Simulate(testPoint, classfication):  # 这个函数干嘛用的，和下面的好像重复了呢？？？？？#
+def judgeCluster_Simulate(testPoint, classfication):
     clusterResult = judge(testPoint)
     data = np.array([])
     index = -1
@@ -511,7 +511,16 @@ def clusterKNN(testData, trainingByesData, originalTestSet, positions_test, clas
         if (tag == 2):
             w1 = 0
             w2 = 16
+            w3 = 8
+        if (tag == 3):
+            w1 = 0
+            w2 = 16
             w3 = 20
+        if (tag == 4):
+            w1 = 0
+            w2 = 16
+            w3 = 20
+
 
         metric = [w1, w2, w3, 24, 25]
         dataSet = class_data[:, metric]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号
