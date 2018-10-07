@@ -9,33 +9,59 @@ def print_svm_score():
     from sklearn.metrics import accuracy_score
     dataFileName = r'/Users/fanpengchen/资料/范师兄材料/data/all5.txt'
     originalData = np.loadtxt(dataFileName)
-    label = []
-    newData = originalData[126:217, 0:4]
-    for i in range(91):
-        label.append(1)
-    for i in range(91):
-        label.append(-1)
-    newData = np.concatenate((newData, originalData[126:217, 8:12]), axis=0)
-    for i in range(112):
-        label.append(1)
-    for i in range(112):
-        label.append(-1)
-    newData = np.concatenate((newData, originalData[355:467, 8:12]), axis=0)
-    newData = np.concatenate((newData, originalData[355:467, 0:4]), axis=0)
-    for i in range(120):
-        label.append(1)
-    for i in range(120):
-        label.append(-1)
-    label = np.array(label)
-    newData = np.concatenate((newData, originalData[235:355, 4:8]), axis=0)
-    newData = np.concatenate((newData, originalData[235:355, 0:4]), axis=0)
 
-    trainData, testData, trainLabel, testLabel = train_test_split(newData, label, train_size=0.8)
-    clf = svm.SVC(probability=True) #直接使用的是5G的信号，因为5G对nlos影响很大，所以判别很明显
-    clf.fit(trainData, trainLabel)
+    trainLabel1 = []
+    trainLabel2 = []
+    trainLabel3 = []
+
+
+    #针对第一个Wi-Fi
+    trainData1 = originalData[0:126,0:4]
+    for i in range(126):
+        trainLabel1.append(-1)
+    trainData1 = np.concatenate((trainData1,originalData[126:217, 0:4]),axis=0)
+    for i in range(91):
+        trainLabel1 .append(1)
+    trainData1 = np.concatenate((trainData1, originalData[217:467, 0:4]), axis=0)
+    for i in range(250):
+        trainLabel1.append(-1)
+    clf1 = svm.SVC(probability=True)  # 直接使用的是5G的信号，因为5G对nlos影响很大，所以判别很明显
+    clf1.fit(trainData1, trainLabel1)
+
+    # 针对第二个Wi-Fi
+    trainData2 = originalData[0:217,4:8]
+    for i in range(217):
+        trainLabel2.append(-1)
+    trainData2 = np.concatenate((trainData2, originalData[217:355, 4:8]), axis=0)
+    for i in range(138):
+        trainLabel2.append(1)
+    trainData2 = np.concatenate((trainData2, originalData[355:467, 4:8]), axis=0)
+    for i in range(112):
+        trainLabel2.append(1)
+    clf2 = svm.SVC(probability=True)  # 直接使用的是5G的信号，因为5G对nlos影响很大，所以判别很明显
+    clf2.fit(trainData2, trainLabel2)
+
+    # 针对第三个Wi-Fi
+    trainData3 = originalData[0:217, 8:12]
+    for i in range(217):
+        trainLabel3.append(-1)
+
+    trainData3 = np.concatenate((trainData3, originalData[217:281, 8:12]), axis=0)
+    for i in range(64):
+        trainLabel3.append(-1)
+    trainData3 = np.concatenate((trainData3, originalData[281:355, 8:12]), axis=0)
+    for i in range(74):
+        trainLabel3.append(1)
+    trainData3 = np.concatenate((trainData3, originalData[355:467, 8:12]), axis=0)
+    for i in range(112):
+        trainLabel3.append(1)
+    clf3 = svm.SVC(probability=True)  # 直接使用的是5G的信号，因为5G对nlos影响很大，所以判别很明显
+    clf3.fit(trainData3, trainLabel3)
+
+
     #result = clf.predict(testData)
     #score = accuracy_score(testLabel, result)
-    return clf
+    return clf1,clf2,clf3
 
 def print_simulate_svm_score():
     """

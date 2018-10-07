@@ -499,28 +499,28 @@ def clusterKNN(testData, trainingByesData, originalTestSet, positions_test, clas
     for i in range(len1):
         which_class = judgeCluster(originalTestSet[i][:], classfication)  # 这里判断出子区域是哪一个，是A、B、C、D等，每一行都是（2.4g,5g)这样的特征值。
         class_data = (which_class[0])[0]  # 对应子区域中的所有数据
-        tag, proby = byes.predict(trainingByesData, originalTestSet[i])
-        if (tag == 0):
+        # tag, proby = byes.predict(trainingByesData, originalTestSet[i])
+        # 判断该点处于何种环境
+        flag_wifi1 = clf[0].predict(originalTestSet[i][12:16].reshape(1, -1))  # 使用5G，返回的是概率。0代表los, 1代表nlos
+        flag_wifi2 = clf[1].predict(originalTestSet[i][16:20].reshape(1, -1))
+        flag_wifi3 = clf[2].predict(originalTestSet[i][20:24].reshape(1, -1))
+        w1 = -1
+        w2 = -1
+        w3 = -1
+        if(flag_wifi1 == -1):
             w1 = 0
-            w2 = 4
-            w3 = 8
-        if (tag == 1):
+        else:
             w1 = 12
-            w2 = 4
-            w3 = 8
-        if (tag == 2):
-            w1 = 0
-            w2 = 16
-            w3 = 8
-        if (tag == 3):
-            w1 = 0
-            w2 = 16
-            w3 = 20
-        if (tag == 4):
-            w1 = 0
-            w2 = 16
-            w3 = 20
 
+        if(flag_wifi2 == -1):
+            w2 = 4
+        else:
+            w2 = 16
+
+        if(flag_wifi3 == -1):
+            w3 = 8
+        else:
+            w3 = 20
 
         metric = [w1, w2, w3, 24, 25]
         dataSet = class_data[:, metric]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号
