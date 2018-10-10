@@ -13,8 +13,9 @@ import function_simulate as f_sim
 
 import kalman_filter as k
 
-BASE_URL = r"d:\范师兄材料\data\\"
-H_BASE_URL = r"C:\Users\Admin\Desktop\data2\\"
+# BASE_URL = r"C:\Users\chenf\Desktop\cailiao\data\\"
+BASE_URL = r'C:\Users\chenf\Desktop\\'
+H_BASE_URL = r"C:\Users\chenf\Desktop\cailiao\data\\"
 
 # 真实情况的代码！！！！！！！！！！！！！！！！！！！！！！！！！！
 
@@ -77,9 +78,9 @@ clusters = f.getClusters(classfication, 4)                 # 调用了函数！�
 # h_testAll = np.loadtxt(h_testAll, dtype=int)
 # r = k.all_kalman_filter(h_testAll)
 # 自己写的结束
-
 # cluster-knn(包括knn和wknn),kmeans-knn/wknn
-f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication, clusters, 0, clf)     # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
+f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet,
+                       cordinaryAllSet, cordinaryTestSet, classfication, clusters, 0, clf)     # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 # knn
 # f.runKnnRealityKNN(trainingSet, testingSet, cordinaryAllSet, cordinaryTestSet, 5, 0)          # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 
