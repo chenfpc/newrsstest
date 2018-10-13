@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # 导入相应的包
+from kmean import kmeans
 import scipy
 import scipy.cluster.hierarchy as sch
-from scipy.cluster.vq import vq, kmeans, whiten
 from sklearn.model_selection import train_test_split
 import scipy.cluster.hierarchy as sch
 # import Matlab as m
 import sklearn as sk
-from sklearn.cluster import KMeans
 import random
 import numpy as np
 import matplotlib.pylab as plt
@@ -16,7 +15,6 @@ from scipy.spatial.distance import cdist
 from scipy.spatial.distance import pdist
 import scipy
 import scipy.cluster.hierarchy as sch
-from scipy.cluster.vq import vq, kmeans, whiten
 import numpy as np
 import matplotlib.pylab as plt
 
@@ -243,7 +241,8 @@ def runCluster(dataSet, numbers):
     centroid = kmeans(dataSet[:, :-2], cluster)[0]
     dataTag = [list() for i in range(cluster)]
     # 使用vq函数根据聚类中心对所有数据进行分类,vq的输出也是两维的,[0]表示的是所有数据的label
-    label = vq(dataSet[:, :-2], centroid)[0]
+    # label = vq(dataSet[:, :-2], centroid)[0]
+    label = []
     for i in range(len(dataSet[:, :-2])):
         dataTag[label[i]].append(dataSet[i])
     return dataTag, centroid
@@ -482,6 +481,8 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
     predict_cordinary = [None] * len1
     # fileObject = open(r"C:\Users\computer\Desktop\cdf_best.txt", "w")
     for i in range(len1):
+        print("fdsfsdfsdfsdfsd")
+        print(i)
         which_class = judgeCluster(originalTestSet[i][:], classfication)  # 这里判断出子区域是哪一个，是A、B、C、D等，每一行都是（2.4g,5g)这样的特征值。
         class_data = (which_class[0])[0]  # 对应子区域中的所有数据
 
@@ -520,15 +521,20 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
         metric_testpoint = [w1, w2, w3, 24, 25]  # 取
         testPoint = testData[i, metric_testpoint]  # 测试点
 
-        numbers = 5
-        cluster = numbers
-        centroids = kmeans(dataSet[:, :-2], cluster)[0]
-        dataTag = [list() for i in range(cluster)]
-        # 使用vq函数根据聚类中心对所有数据进行分类,vq的输出也是两维的,[0]表示的是所有数据的label
-        label = vq(dataSet[:, :-2], centroids)[0]
-        for j in range(len(dataSet[:, :-2])):
-            dataTag[label[j]].append(dataSet[j])
+        # numbers = 5
+        # cluster = numbers
+        # centroids = kmeans(dataSet[:, :-2], cluster)[0]
+        # dataTag = [list() for i in range(cluster)]
+        # # 使用vq函数根据聚类中心对所有数据进行分类,vq的输出也是两维的,[0]表示的是所有数据的label
+        # label = vq(dataSet[:, :-2], centroids)[0]
+        # for j in range(len(dataSet[:, :-2])):
+        #     dataTag[label[j]].append(dataSet[j])
+        numbers = 5;
 
+        label,centroids = kmeans(dataSet[:,:-2],numbers)
+        dataTag = [list() for i in range(numbers)]
+        for j in range(len(dataSet[:,:-2])):
+            dataTag[label[j]].append(dataSet[j])
         """
         #获取cluster
         clusterData = clusters[label[1]]
@@ -555,14 +561,13 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
         metric_testpoint2 = [w11, w22, w33, 24, 25]  # 取
         testPoint2 = testData[i, metric_testpoint2]  # 测试点
 
-        numbers2 = 5
-        cluster2 = numbers2
-        centroids2 = kmeans(dataSet2[:, :-2], cluster2)[0]  # 将选出的子区域中的数据拿到kmeans算法中进行该区域的聚类运算
-        dataTag2 = [list() for i in range(cluster2)]
-        # 使用vq函数根据聚类中心对所有数据进行分类,vq的输出也是两维的,[0]表示的是所有数据的label
-        label_2 = vq(dataSet2[:, :-2], centroids2)[0]
-        for j in range(len(dataSet2[:, :-2])):
-            dataTag2[label_2[j]].append(dataSet2[j])
+        numbers2 = 5;
+        print("fffff")
+        print(i)
+        label2, centroids2 = kmeans(dataSet[:, :-2], numbers2)
+        dataTag2 = [list() for i in range(numbers2)]
+        for j in range(len(dataSet[:, :-2])):
+            dataTag2[label2[j]].append(dataSet[j])
 
         """
         #获取cluster

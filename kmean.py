@@ -44,12 +44,14 @@ def plus(dataSet, k=2):
     return centers
 
 
-def kmeans(dataSet, *, k, maxIter=300):
+def kmeans(dataSet, k, maxIter=300):
+    print("***********************************")
     # initialize with ++
 
     centers = plus(dataSet, k)
 
-    plt.scatter(*centers.T, s=200)
+    #
+    # plt.scatter(*centers.T, s=200)
 
     def getLabel(data):
 
@@ -65,17 +67,27 @@ def kmeans(dataSet, *, k, maxIter=300):
 
         j += 1
 
-        label_new = np.array(list(map(getLabel, dataSet)))  # 生成新的标签
 
+        print(dataSet)
+        print(centers)
+        label_new = np.array(list(map(getLabel, dataSet)))  # 生成新的标签
+        print("lable_new")
+        print(label_new)
         if sum(np.abs(labels - label_new)) == 0:  # 判断标签是否改变
 
             break
 
         labels = label_new
 
+        print("kaishi")
+        print(j)
         for i in range(k):
+            print(i)
+            print(labels)
+            print(dataSet[labels == i])
             centers[i] = np.mean(dataSet[labels == i], axis=0)  # 更新聚类中心
 
+        print(centers)
     SSE = sum(
         [sum([(j - centers[i]).dot(j - centers[i]) for j in dataSet[labels == i]]) for i in range(k)])  # 计算误差平方和
 
@@ -84,13 +96,13 @@ def kmeans(dataSet, *, k, maxIter=300):
     return label_new, centers
 
 
-datas = dataLoader("testSet.txt")
-
-labels, centers = kmeans(datas, k=4)
-
-plt.figure(figsize=(15, 12.18))
-for i in set(labels):
-    plt.scatter(*(datas[labels == i].T), color=np.random.rand(3), s=100)
-
-    plt.scatter(*centers[i], marker='^', s=200)
-plt.show()
+# datas = dataLoader("testSet.txt")
+#
+# labels, centers = kmeans(datas, k=4)
+#
+# plt.figure(figsize=(15, 12.18))distanceS
+# for i in set(labels):
+#     plt.scatter(*(datas[labels == i].T), color=np.random.rand(3), s=100)
+#
+#     plt.scatter(*centers[i], marker='^', s=200)
+# plt.show()

@@ -70,8 +70,8 @@ clf = svm.print_svm_score()  # 改动了师兄的！！！！！！！！！！�
 classfication = f.runClassfication(originalTrainingSet, cordinaryAllSet)       # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 
 # 在每个子区域中在进行kemans
-clusters = f.getClusters(classfication, 4)                 # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
-
+# clusters = f.getClusters(classfication, 4)                 # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
+clusters=[]
 # 以下是自己写的
 # 调用卡尔曼滤波方法！！！！！！！！！！！！！！！！！！！！
 # h_testAll = H_BASE_URL + 'Htest_All.txt'
