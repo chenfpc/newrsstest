@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*- 
 # 导入相应的包
 from sklearn import preprocessing
+import navieBayes as byes
 import fucntion as f
 import scipy.io as sio
 from sklearn.model_selection import train_test_split
@@ -79,8 +80,25 @@ clusters=[]
 # r = k.all_kalman_filter(h_testAll)
 # 自己写的结束
 # cluster-knn(包括knn和wknn),kmeans-knn/wknn
-f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet,
-                       cordinaryAllSet, cordinaryTestSet, classfication, clusters, 0, clf)     # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
+bayes = byes.NaiveBayesContinuous()
+x1 = []
+x2 = []
+for i in range(70):
+    result = f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet,
+                           cordinaryAllSet, cordinaryTestSet, classfication, clusters, 0, clf, bayes)
+    x1.append(result[0])
+    x2.append(result[1])
+x1 = np.array(x1)
+print(x1)
+index1 = x1.argsort()
+cdf = x2[index1[0]]
+print(cdf)
+cdf = np.array(cdf)
+fileObject = open(BASE_URL + "cdf_best.txt", "w")
+for i in range(len(cdf)):
+    fileObject.write(str(cdf[i]))
+    fileObject.write("\n")
+fileObject.close()
 # knn
 # f.runKnnRealityKNN(trainingSet, testingSet, cordinaryAllSet, cordinaryTestSet, 5, 0)          # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 

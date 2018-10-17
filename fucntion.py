@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # 导入相应的包
+
 from scipy.cluster.vq import vq, kmeans, whiten
 import scipy
 import scipy.cluster.hierarchy as sch
@@ -17,6 +18,33 @@ import scipy
 import scipy.cluster.hierarchy as sch
 import numpy as np
 import matplotlib.pylab as plt
+
+BASE_URL = r'C:\Users\chenf\Desktop\\'
+def getCategoryForBayes():
+    dataFileName = BASE_URL + 'all5.txt'
+    originalData = np.loadtxt(dataFileName)
+
+    result = np.zeros((646, 3))  # 待定
+
+    x1 = np.array([1] * 91).reshape((91, 1))
+    result[0:91, :] = np.concatenate((originalData[126:217, 2:4], x1), axis=1)
+
+    x2 = np.array([-1] * 91).reshape((91, 1))
+    result[91:182] = np.concatenate((originalData[126:217, 10:12], x2), axis=1)
+
+    x3 = np.array([1] * 112).reshape(112, 1)
+    result[182:294, :] = np.concatenate((originalData[355:467, 10:12], x3), axis=1)
+
+    x4 = np.array([-1] * 112).reshape(112, 1)
+    result[294:406, :] = np.concatenate((originalData[355:467, 2:4], x4), axis=1)
+
+    x5 = np.array([1] * 120).reshape(120, 1)
+    result[406:526, :] = np.concatenate((originalData[235:355, 6:8], x5), axis=1)
+
+    x6 = np.array([-1] * 120).reshape(120, 1)
+    result[526:646, :] = np.concatenate((originalData[235:355, 2:4], x6), axis=1)
+    return result
+
 
 """
     testData: 表示测试点的数据（RSS和位置）
@@ -249,7 +277,7 @@ def runCluster(dataSet, numbers):
 
 
 def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication,
-                         clusters, ifweight, clf):
+                         clusters, ifweight, clf,bayes):
     """
     :param trainingSet: 归一化后的训练集
     :param testingSet:  归一化后的测试机
@@ -262,12 +290,13 @@ def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryA
     :return:
     """
     # 选择给RSS加权重需要改变 testingSet
+    trainingByesData = []
     testingSet_cordinary = np.column_stack((testingSet, cordinaryTestSet))  # 将RSS值和位置信息合并在一起
-    result = clusterKNN(testingSet_cordinary, originalTestingSet, cordinaryTestSet, classfication, clusters, ifweight,
-                          clf)
+    result = clusterKNN(testingSet_cordinary, trainingByesData,originalTestingSet, cordinaryTestSet, classfication, clusters, ifweight,
+                          clf,bayes)
     print("平均误差为")
     print(result[0])
-    return result[1]
+    return result
 
 
 # def runSimulateClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication,
@@ -366,7 +395,7 @@ def judgeCluster(testPoint, classfication):
     return data, index
 
 
-def calculateCordinary(k, data, point, index, positions_test, ifweight, originalPoint, data2, testPoint2, weight):
+def calculateCordinary(k, data, point, index, positions_test, ifweight, originalPoint):
     """
     :param  K:选取几个k近邻点
     :param  data: 所处聚类的数据
@@ -377,27 +406,18 @@ def calculateCordinary(k, data, point, index, positions_test, ifweight, original
     :return 返回和实际位置的误差，以及预测坐标
     """
     result = knn(point, data, k, ifweight, originalPoint)
-    result_B = knn(testPoint2, data2, k, ifweight, originalPoint)
 
-    # 以下是自己添加的代码
-    # 将r中的权重细分
-    w = weight[0]
-    w_All = weight[2]
-    w_B = weight[1]
-    h_result = [0, 0]
-    h_result[0] = (w / w_All) * result[0] + (w_B / w_All) * result_B[0]  # 给横纵坐标分别加以权重
-    h_result[1] = (w / w_All) * result[1] + (w_B / w_All) * result_B[1]
-    # 自己添加的代码结束
 
-    predic_position = h_result
-    result = (h_result - positions_test[index]) ** 2
+
+    predic_position = result
+    result = (result - positions_test[index]) ** 2
     error = result.sum(axis=0) ** 0.5  # 为什么#
     # print(error)
     count = 0
-    if (error > 2):  # 输出误差大于2的预测坐标和真实坐标
-        print("预测坐标", predic_position)
-        print("真实坐标", positions_test[index])
-        print(error)
+    # if (error > 2):  # 输出误差大于2的预测坐标和真实坐标
+    #     print("预测坐标", predic_position)
+    #     print("真实坐标", positions_test[index])
+    #     print(error)
     return error, predic_position
 
 
@@ -462,7 +482,7 @@ def knn(testPoint, dataset, k, ifWeight, originalPoint):
             return sumx / k, sumy / k
 
 
-def clusterKNN(testData, originalTestSet, positions_test, classfication, clusters, ifweight, clf):
+def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, classfication, clusters, ifweight, clf,bayes):
     """
     聚类KNN或者wknn
     :param testData: 训练集，包含数据和坐标（处理好的数据）
@@ -474,6 +494,7 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
     :param clf: smvc训练出的模型
     :return:
     """
+    cdf = []
     index = 0
     error = 0
     len1 = len(positions_test)
@@ -481,7 +502,6 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
     predict_cordinary = [None] * len1
     # fileObject = open(r"C:\Users\computer\Desktop\cdf_best.txt", "w")
     for i in range(len1):
-        print("fdsfsdfsdfsdfsd")
         print(i)
         which_class = judgeCluster(originalTestSet[i][:], classfication)  # 这里判断出子区域是哪一个，是A、B、C、D等，每一行都是（2.4g,5g)这样的特征值。
         class_data = (which_class[0])[0]  # 对应子区域中的所有数据
@@ -497,24 +517,42 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
 
 
     # 根据NLOS的状态取不同的值
-        if flag_wifi1[0][0] < 0.4:  # 1对应los, -1代表nlos
+        if flag_wifi1[0][0] < 0.35:  # 1对应los, -1代表nlos
             w1 = 12
-            w11 = 0
-        else :
+
+        elif flag_wifi1[0][0] < 0.65:
+            tag, proby = bayes.predict(trainingByesData, originalTestSet[i][14:16])
+            if tag == -1:
+                w1 = 0
+            else:
+                w1 = 12
+        else:
             w1 = 0
-            w11 = 12
-        if flag_wifi2[0][0] < 0.4:  # 1对应los
+
+        if flag_wifi2[0][0] < 0.35:  # 1对应los
             w2 = 16
-            w22 = 4
+
+        elif flag_wifi2[0][0] < 0.65:
+            tag, proby = bayes.predict(trainingByesData, originalTestSet[i][18:20])
+            if tag == -1:
+                w2 = 4
+            else:
+                w2 = 16
         else:
             w2 = 4
-            w22 = 16
-        if flag_wifi3[0][0] < 0.4:  # 1对应los
+
+        if flag_wifi3[0][0] < 0.35:  # 1对应los
             w3 = 20
-            w33 = 8
+
+        elif flag_wifi3[0][0] < 0.65:
+            tag, proby = bayes.predict(trainingByesData, originalTestSet[i][22:24])
+            if tag == -1:
+                w3 = 8
+            else:
+                w3 = 20
         else:
             w3 = 8
-            w33 = 20
+
 
         metric = [w1, w2, w3, 24, 25]
         dataSet = class_data[:, metric]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号
@@ -554,86 +592,12 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
 
         data = dataTag[index]
 
-        metric2 = [w11, w22, w33, 24, 25]
-        dataSet2 = class_data[:, metric2]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号      ，class_data为选出的子区域中的所有数据
-        # 将子区域中的数据筛选出来以便于进行对比匹配，筛选出例如2.4G、5G、2.4G这样的
-        # 以下是测试点数据
-        metric_testpoint2 = [w11, w22, w33, 24, 25]  # 取
-        testPoint2 = testData[i, metric_testpoint2]  # 测试点
-
-        numbers2 = 5
-        cluster = numbers2
-        centroids2 = kmeans(dataSet2[:, :-2], cluster)[0]
-        dataTag2 = [list() for i in range(cluster)]
-        # 使用vq函数根据聚类中心对所有数据进行分类,vq的输出也是两维的,[0]表示的是所有数据的label
-        label2 = vq(dataSet2[:, :-2], centroids2)[0]
-        for j in range(len(dataSet2[:, :-2])):
-            dataTag2[label2[j]].append(dataSet2[j])
-
-
-        """
-        #获取cluster
-        clusterData = clusters[label[1]]
-        centroids = clusterData[1]
-        datas = clusterData[0]
-        """
-        index = 0
-        temp = 100000
-        for j in range(len(centroids2)):
-            sub = testPoint2[:-2] - centroids2[j]  # 计算测试点与聚类中心的距离
-            differ = sub ** 2
-            # print("DIFFER",differ)
-            result = differ.sum(axis=0)
-            if result < temp:
-                temp = result  # 选出离测试点最近的聚类中心的位置
-                index = j
-
-        data2 = dataTag2[index]  # 将选出来的聚类中心所在的类的数据赋给data
-
-        if (metric[0] == 12):  # 表明wifi1处于los情况，应当用5G信号去确定位置
-            weight_wifi1 = 1 - proba_wifi1  # 第一组权重
-            weight_wifi1_B = proba_wifi1  # 第二组权重    此处代表2.4G信号的权重
-
-        elif (metric[0] == 0):  # 表明wifi1处于nlos情况，应当用2.4G信号去确定位置
-            weight_wifi1 = proba_wifi1
-            if (weight_wifi1 > 0.8):
-                weight_wifi1_B = 0
-            else:
-                weight_wifi1_B = 1 - proba_wifi1
-
-        if (metric[1] == 16):
-            weight_wifi2 = 1 - proba_wifi2
-            weight_wifi2_B = proba_wifi2
-        elif (metric[1] == 4):
-            weight_wifi2 = proba_wifi2
-            if (weight_wifi2 > 0.8):
-                weight_wifi2_B = 0
-            else:
-                weight_wifi2_B = 1 - proba_wifi2
-
-        if (metric[2] == 20):
-            weight_wifi3 = 1 - proba_wifi3
-            weight_wifi3_B = proba_wifi3
-        elif (metric[2] == 8):
-            weight_wifi3 = proba_wifi3
-            if(weight_wifi3 > 0.8):
-                weight_wifi3_B = 0
-            else:
-                weight_wifi3_B = 1 - proba_wifi3
-
-        # 以下代码开始给位置加权重
-
-        w =  (weight_wifi1 + weight_wifi2 + weight_wifi3)*5
-        w_B = (w1 +w2+w3) *2
-        w_All = w + w_B
-        weight = np.array([w, w_B, w_All])
-
         # 这里直接把data = label[0]
         # data = (label[0])[0] #labell=[0]直接返回的是子区域中的所有点，而clusters代表的是这个子区域中的所有聚类。
-        result = calculateCordinary(5, data, testPoint, i, positions_test, ifweight, originalTestSet[i][:], data2,
-                                    testPoint2, weight)
+        result = calculateCordinary(5, data, testPoint, i, positions_test, ifweight, originalTestSet[i][:])
         # print(result[0])
-        # x = result[0]
+        x = result[0]
+        cdf.append(x)
         # if result[0] > 4.5:
         #     x = random.randint(1,10)*0.5
         # fileObject.write(str(x))
@@ -641,7 +605,7 @@ def clusterKNN(testData, originalTestSet, positions_test, classfication, cluster
         error = error + result[0]
         predict_cordinary[i] = result[1]
         # fileObject.close()
-    return error / len(positions_test), predict_cordinary
+    return error / len(positions_test), cdf
 
 
 # def clusterKNN(testData, originalTestSet, positions_test, classfication,clusters,ifweight,clf):

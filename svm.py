@@ -34,8 +34,9 @@ def print_svm_score():
     trainData, testData, trainLabel, testLabel = train_test_split(newData, label, train_size=0.8)
     clf = svm.SVC(probability=True) #直接使用的是5G的信号，因为5G对nlos影响很大，所以判别很明显
     clf.fit(trainData, trainLabel)
-    #result = clf.predict(testData)
-    #score = accuracy_score(testLabel, result)
+    result = clf.predict(testData)
+    score = accuracy_score(testLabel, result)
+    print(score)
     return clf
 
 def print_simulate_svm_score():
