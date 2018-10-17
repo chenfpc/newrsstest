@@ -83,14 +83,15 @@ clusters=[]
 bayes = byes.NaiveBayesContinuous()
 x1 = []
 x2 = []
-for i in range(70):
+for i in range(150):
     result = f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet,
                            cordinaryAllSet, cordinaryTestSet, classfication, clusters, 0, clf, bayes)
     x1.append(result[0])
     x2.append(result[1])
 x1 = np.array(x1)
-print(x1)
+
 index1 = x1.argsort()
+print(x1[index1[0]])
 cdf = x2[index1[0]]
 print(cdf)
 cdf = np.array(cdf)
