@@ -25,13 +25,13 @@ cordinaryTest = np.loadtxt(cordinaryTest)
 
 
 # 将原始数据做归一化处理     （没有将归一化处理的数据传入到函数当中）
-scaler = preprocessing.StandardScaler().fit(training2_4g)
-training2_4g = scaler.transform(training2_4g)
-testing2_4g = scaler.transform(testing2_4g)
+scaler = preprocessing.StandardScaler().fit(training5g)
+training5g = scaler.transform(training5g)
+testing5g = scaler.transform(testing5g)
 
-print(np.any(np.isnan(training2_4g)))
+print(np.any(np.isnan(training5g)))
 
-print(np.any(np.isnan(testing2_4g)))
+print(np.any(np.isnan(testing5g)))
 
 # 定义变量函数(权重和偏差)，stdev参数表示方差
 def init_weight(shape, st_dev):
@@ -56,8 +56,8 @@ x = tf.placeholder(tf.float32, shape=[1], name='x')
 y = tf.placeholder(tf.float32, shape=[1], name='y')
 
 # --------Create the first layer (12 hidden nodes)--------
-w11 = tf.Variable(tf.random_normal([12, 5], stddev=0.03), name="w11")
-b11 = tf.Variable(tf.random_normal([5], stddev = 0.03),name="b11")
+w11 = tf.Variable(tf.random_normal([12, 5], stddev=1), name="w11")
+b11 = tf.Variable(tf.random_normal([5], stddev = 1),name="b11")
 layer_1 = fully_connected(input1,w11,b11)
 
 #------------- 第2层
@@ -66,29 +66,31 @@ b12 = tf.Variable(tf.random_normal([1, 2], stddev=0.1), name="b12")
 layer_2 = fully_connected(layer_1,w12,b12)
 
 # 定义loss表达式
+loss_train = tf.reduce_mean(tf.reduce_sum(tf.square(target - layer_2), reduction_indices=[1]))
 loss = tf.reduce_mean(tf.sqrt(tf.reduce_sum(tf.square(target - layer_2), reduction_indices=[1])))
-train_step = tf.train.AdadeltaOptimizer(0.1 ).minimize(loss)
+train_step = tf.train.AdadeltaOptimizer(0.01).minimize(loss)
 
 loss_vec = []
 test_loss = []
 # 激活会话
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    tf.summary.FileWriter(BASE_URL+"/tensorboard/test",sess.graph)
+    tf.summary.FileWriter(BASE_URL+"/tensorboard/test1",sess.graph)
 
-    for i in range(70000):
-        sess.run(train_step,feed_dict={input1:training2_4g,target:cordinaryAll})
-        temp_loss = sess.run(loss,feed_dict={input1:training2_4g,target:cordinaryAll})
+    for i in range(100000):
+        sess.run(train_step,feed_dict={input1:training5g,target:cordinaryAll})
+        temp_loss = sess.run(loss_train,feed_dict={input1:training5g,target:cordinaryAll})
         loss_vec.append(temp_loss)
 
-        test_temp_loss = sess.run(loss,feed_dict={input1:testing2_4g, target:cordinaryTest})
+        test_temp_loss = sess.run(loss,feed_dict={input1:testing5g, target:cordinaryTest})
         test_loss.append(test_temp_loss)
         if(i+1) % 20 == 0:
             print('Generation' + str(i+1) + '.LOSS = ' + str(test_temp_loss))
-
-plt.plot(loss_vec,"k--",label="train loss")
+y_ticks = np.arange(0,25,0.5)
+# plt.plot(loss_vec,"k--",label="train loss")
 plt.plot(test_loss,"r--",label="test loss")
 plt.title("loss(mse) per generation")
+plt.yticks(y_ticks)
 plt.legend(loc="upper right")
 plt.xlabel("generation")
 plt.ylabel("loss")
