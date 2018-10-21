@@ -56,8 +56,8 @@ x = tf.placeholder(tf.float32, shape=[1], name='x')
 y = tf.placeholder(tf.float32, shape=[1], name='y')
 
 # --------Create the first layer (12 hidden nodes)--------
-w11 = tf.Variable(tf.random_normal([12, 5], stddev=0.03), name="w11")
-b11 = tf.Variable(tf.random_normal([5], stddev = 0.03),name="b11")
+w11 = tf.Variable(tf.random_normal([12, 5], stddev=0.01), name="w11")
+b11 = tf.Variable(tf.random_normal([5], stddev = 0.01),name="b11")
 layer_1 = fully_connected(input1,w11,b11)
 
 #------------- 第2层

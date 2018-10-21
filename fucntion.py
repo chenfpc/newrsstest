@@ -296,7 +296,7 @@ def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryA
                           clf,bayes)
     print("平均误差为")
     print(result[0])
-    return result
+    return result[1]
 
 
 # def runSimulateClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication,
@@ -506,60 +506,14 @@ def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, class
         which_class = judgeCluster(originalTestSet[i][:], classfication)  # 这里判断出子区域是哪一个，是A、B、C、D等，每一行都是（2.4g,5g)这样的特征值。
         class_data = (which_class[0])[0]  # 对应子区域中的所有数据
 
-        # 判断该点处于何种环境
-        flag_wifi1 = np.array(clf.predict_proba(originalTestSet[i][12:16].reshape(1, -1))) # 使用5G，返回的是概率。0代表los, 1代表nlos
-        flag_wifi2 = np.array(clf.predict_proba(originalTestSet[i][16:20].reshape(1, -1)))
-        flag_wifi3 = np.array(clf.predict_proba(originalTestSet[i][20:24].reshape(1, -1)))
-
-        proba_wifi1 = flag_wifi1[0][0]  # nlos概率
-        proba_wifi2 = flag_wifi2[0][0]  # nlos概率
-        proba_wifi3 = flag_wifi3[0][0]  # nlos概率
 
 
-    # 根据NLOS的状态取不同的值
-        if flag_wifi1[0][0] < 0.35:  # 1对应los, -1代表nlos
-            w1 = 12
 
-        elif flag_wifi1[0][0] < 0.65:
-            tag, proby = bayes.predict(trainingByesData, originalTestSet[i][14:16])
-            if tag == -1:
-                w1 = 0
-            else:
-                w1 = 12
-        else:
-            w1 = 0
+        dataSet = class_data[:,:]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号
 
-        if flag_wifi2[0][0] < 0.35:  # 1对应los
-            w2 = 16
+        testPoint = testData[i]  # 测试点
 
-        elif flag_wifi2[0][0] < 0.65:
-            tag, proby = bayes.predict(trainingByesData, originalTestSet[i][18:20])
-            if tag == -1:
-                w2 = 4
-            else:
-                w2 = 16
-        else:
-            w2 = 4
-
-        if flag_wifi3[0][0] < 0.35:  # 1对应los
-            w3 = 20
-
-        elif flag_wifi3[0][0] < 0.65:
-            tag, proby = bayes.predict(trainingByesData, originalTestSet[i][22:24])
-            if tag == -1:
-                w3 = 8
-            else:
-                w3 = 20
-        else:
-            w3 = 8
-
-
-        metric = [w1, w2, w3, 24, 25]
-        dataSet = class_data[:, metric]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号
-        metric_testpoint = [w1, w2, w3, 24, 25]  # 取
-        testPoint = testData[i, metric_testpoint]  # 测试点
-
-        numbers = 5
+        numbers = 7
         cluster = numbers
         centroids = kmeans(dataSet[:, :-2], cluster)[0]
         dataTag = [list() for i in range(cluster)]
@@ -594,7 +548,7 @@ def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, class
 
         # 这里直接把data = label[0]
         # data = (label[0])[0] #labell=[0]直接返回的是子区域中的所有点，而clusters代表的是这个子区域中的所有聚类。
-        result = calculateCordinary(5, data, testPoint, i, positions_test, ifweight, originalTestSet[i][:])
+        result = calculateCordinary(4, data, testPoint, i, positions_test, ifweight, originalTestSet[i][:])
         # print(result[0])
         x = result[0]
         cdf.append(x)
