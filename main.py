@@ -83,9 +83,9 @@ clusters=[]
 bayes = byes.NaiveBayesContinuous()
 x1 = []
 x2 = []
-for i in range(150):
-    result = f.runRealityClusterKnn(originalTrainingSet, originalTestingSet, originalTestingSet,
-                           cordinaryAllSet, cordinaryTestSet, classfication, clusters, 0, clf, bayes)
+for i in range(70):
+    result = f.runRealityClusterKnn(6,originalTrainingSet, originalTestingSet, originalTestingSet,
+                           cordinaryAllSet, cordinaryTestSet, classfication, clusters, 1, clf, bayes)
     x1.append(result[0])
     x2.append(result[1])
 x1 = np.array(x1)
@@ -95,7 +95,7 @@ print(x1[index1[0]])
 cdf = x2[index1[0]]
 print(cdf)
 cdf = np.array(cdf)
-fileObject = open(BASE_URL + "cdf_best.txt", "w")
+fileObject = open(BASE_URL + "cdf_myMethod_Knumber_wKNN_6.txt", "w")
 for i in range(len(cdf)):
     fileObject.write(str(cdf[i]))
     fileObject.write("\n")

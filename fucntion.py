@@ -20,6 +20,8 @@ import numpy as np
 import matplotlib.pylab as plt
 
 BASE_URL = r'C:\Users\chenf\Desktop\\'
+
+
 def getCategoryForBayes():
     dataFileName = BASE_URL + 'all5.txt'
     originalData = np.loadtxt(dataFileName)
@@ -276,8 +278,9 @@ def runCluster(dataSet, numbers):
     return dataTag, centroid
 
 
-def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication,
-                         clusters, ifweight, clf,bayes):
+def runRealityClusterKnn(k, trainingSet, testingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet,
+                         classfication,
+                         clusters, ifweight, clf, bayes):
     """
     :param trainingSet: 归一化后的训练集
     :param testingSet:  归一化后的测试机
@@ -292,8 +295,9 @@ def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryA
     # 选择给RSS加权重需要改变 testingSet
     trainingByesData = []
     testingSet_cordinary = np.column_stack((testingSet, cordinaryTestSet))  # 将RSS值和位置信息合并在一起
-    result = clusterKNN(testingSet_cordinary, trainingByesData,originalTestingSet, cordinaryTestSet, classfication, clusters, ifweight,
-                          clf,bayes)
+    result = clusterKNN(k, testingSet_cordinary, trainingByesData, originalTestingSet, cordinaryTestSet, classfication,
+                        clusters, ifweight,
+                        clf, bayes)
     print("平均误差为")
     print(result[0])
     return result
@@ -407,8 +411,6 @@ def calculateCordinary(k, data, point, index, positions_test, ifweight, original
     """
     result = knn(point, data, k, ifweight, originalPoint)
 
-
-
     predic_position = result
     result = (result - positions_test[index]) ** 2
     error = result.sum(axis=0) ** 0.5  # 为什么#
@@ -438,6 +440,8 @@ def knn(testPoint, dataset, k, ifWeight, originalPoint):
     if ifWeight == 1:
         k_sum = 0  # k_sum为所有权重之和
         weight = []
+        if k > datasetSize:
+            k = datasetSize
         for i in range(k):
 
             temp = x - dataset[sortedDistIndicies[i]][:-2]
@@ -482,7 +486,8 @@ def knn(testPoint, dataset, k, ifWeight, originalPoint):
             return sumx / k, sumy / k
 
 
-def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, classfication, clusters, ifweight, clf,bayes):
+def clusterKNN(k, testData, trainingByesData, originalTestSet, positions_test, classfication, clusters, ifweight, clf,
+               bayes):
     """
     聚类KNN或者wknn
     :param testData: 训练集，包含数据和坐标（处理好的数据）
@@ -507,7 +512,8 @@ def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, class
         class_data = (which_class[0])[0]  # 对应子区域中的所有数据
 
         # 判断该点处于何种环境
-        flag_wifi1 = np.array(clf.predict_proba(originalTestSet[i][12:16].reshape(1, -1))) # 使用5G，返回的是概率。0代表los, 1代表nlos
+        flag_wifi1 = np.array(
+            clf.predict_proba(originalTestSet[i][12:16].reshape(1, -1)))  # 使用5G，返回的是概率。0代表los, 1代表nlos
         flag_wifi2 = np.array(clf.predict_proba(originalTestSet[i][16:20].reshape(1, -1)))
         flag_wifi3 = np.array(clf.predict_proba(originalTestSet[i][20:24].reshape(1, -1)))
 
@@ -515,8 +521,7 @@ def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, class
         proba_wifi2 = flag_wifi2[0][0]  # nlos概率
         proba_wifi3 = flag_wifi3[0][0]  # nlos概率
 
-
-    # 根据NLOS的状态取不同的值
+        # 根据NLOS的状态取不同的值
         if flag_wifi1[0][0] < 0.35:  # 1对应los, -1代表nlos
             w1 = 12
 
@@ -552,7 +557,6 @@ def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, class
                 w3 = 20
         else:
             w3 = 8
-
 
         metric = [w1, w2, w3, 24, 25]
         dataSet = class_data[:, metric]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号
@@ -594,7 +598,7 @@ def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, class
 
         # 这里直接把data = label[0]
         # data = (label[0])[0] #labell=[0]直接返回的是子区域中的所有点，而clusters代表的是这个子区域中的所有聚类。
-        result = calculateCordinary(5, data, testPoint, i, positions_test, ifweight, originalTestSet[i][:])
+        result = calculateCordinary(k, data, testPoint, i, positions_test, ifweight, originalTestSet[i][:])
         # print(result[0])
         x = result[0]
         cdf.append(x)
@@ -606,7 +610,6 @@ def clusterKNN(testData,trainingByesData, originalTestSet, positions_test, class
         predict_cordinary[i] = result[1]
         # fileObject.close()
     return error / len(positions_test), cdf
-
 
 # def clusterKNN(testData, originalTestSet, positions_test, classfication,clusters,ifweight,clf):
 #     """
