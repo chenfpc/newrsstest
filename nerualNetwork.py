@@ -46,7 +46,7 @@ def init_bias(shape, st_dev):
 # 创建一个全连接层函数
 def fully_connected(input_layer, weights, biases):
     layer = tf.add(tf.matmul(input_layer, weights), biases)
-    return (tf.nn.relu(layer))
+    return (tf.nn.sigmoid(layer))
 
 #数据占位符
 input1 = tf.placeholder(tf.float32, shape=[None, 12], name="24g")
@@ -56,17 +56,24 @@ x = tf.placeholder(tf.float32, shape=[1], name='x')
 y = tf.placeholder(tf.float32, shape=[1], name='y')
 
 # --------Create the first layer (12 hidden nodes)--------
-w11 = tf.Variable(tf.random_normal([12, 5], stddev=0.03), name="w11")
-b11 = tf.Variable(tf.random_normal([5], stddev = 0.03),name="b11")
+w11 = tf.Variable(tf.random_normal([12, 8], mean=0,stddev=1), name="w11")
+b11 = tf.Variable(tf.random_normal([1,8]) + 0.1,name="b11")
 layer_1 = fully_connected(input1,w11,b11)
 
 #------------- 第2层
-w12 = tf.Variable(tf.random_normal([5, 2], stddev=0.1), name="w12")
-b12 = tf.Variable(tf.random_normal([1, 2], stddev=0.1), name="b12")
+w12 = tf.Variable(tf.random_normal([8, 5],mean=0, stddev=1), name="w12")
+b12 = tf.Variable(tf.random_normal([1, 5])+0.1, name="b12")
 layer_2 = fully_connected(layer_1,w12,b12)
 
+#--------------第3层
+w13 = tf.Variable(tf.random_normal([5, 2],mean=0, stddev=1), name="w13")
+b13 = tf.Variable(tf.random_normal([1, 2])+0.1, name="b13")
+layer_3 = tf.add(tf.matmul(layer_2, w13), b13)
+
 # 定义loss表达式
-loss = tf.reduce_mean(tf.sqrt(tf.reduce_sum(tf.square(target - layer_2), reduction_indices=[1])))
+loss = tf.reduce_mean(tf.reduce_sum(tf.square(target - layer_3), reduction_indices=[1]))
+
+testLoss = tf.reduce_mean(tf.sqrt(tf.reduce_sum(tf.square(target - layer_3), reduction_indices=[1])))
 train_step = tf.train.AdadeltaOptimizer(0.1 ).minimize(loss)
 
 loss_vec = []
@@ -74,14 +81,16 @@ test_loss = []
 # 激活会话
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    for i in range(30000):
+    tf.summary.FileWriter(BASE_URL+"/tensorboard/test",sess.graph)
+
+    for i in range(90000):
         sess.run(train_step,feed_dict={input1:training2_4g,target:cordinaryAll})
-        temp_loss = sess.run(loss,feed_dict={input1:training2_4g,target:cordinaryAll})
+        temp_loss = sess.run(testLoss,feed_dict={input1:training2_4g,target:cordinaryAll})
         loss_vec.append(temp_loss)
 
-        test_temp_loss = sess.run(loss,feed_dict={input1:testing2_4g, target:cordinaryTest})
+        test_temp_loss = sess.run(testLoss,feed_dict={input1:testing2_4g, target:cordinaryTest})
         test_loss.append(test_temp_loss)
-        if(i+1) % 20 == 0:
+        if(i+1) % 50 == 0:
             print('Generation' + str(i+1) + '.LOSS = ' + str(test_temp_loss))
 
 plt.plot(loss_vec,"k--",label="train loss")
