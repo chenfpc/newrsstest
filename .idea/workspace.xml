@@ -4,9 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/nerualNetwork.py" line="24" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7b5b4bf-b073-49e0-8e4c-5abbd04eccaa" name="Default Changelist" comment="暂时取消kmeans++计划；&#10;svm概率比如los nlos los （1）&#10;接着计算 nlos los nlos(2)&#10;两种概率计算">
-      <change beforePath="$PROJECT_DIR$/fucntion.py" beforeDir="false" afterPath="$PROJECT_DIR$/fucntion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="e7b5b4bf-b073-49e0-8e4c-5abbd04eccaa" name="Default Changelist" comment="无需理会，中间版本">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw-test.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw-test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,9 +17,10 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/test$svmtest.coverage" NAME="svmtest Coverage Results" MODIFIED="1537370455435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/newrsstest$draw_test.coverage" NAME="draw-test Coverage Results" MODIFIED="1540554692347" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test$fucntion.coverage" NAME="fucntion Coverage Results" MODIFIED="1537777251264" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test$main.coverage" NAME="main Coverage Results" MODIFIED="1538408331777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/newrsstest$main.coverage" NAME="main Coverage Results" MODIFIED="1540460886645" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/newrsstest$main.coverage" NAME="main Coverage Results" MODIFIED="1540543600989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/newrsstest$nerualNetwork.coverage" NAME="nerualNetwork Coverage Results" MODIFIED="1539330655617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/test$_datasource.coverage" NAME="_datasource Coverage Results" MODIFIED="1537776511539" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Anaconda3/Lib/site-packages/numpy/lib" />
     <SUITE FILE_PATH="coverage/newrsstest$svmtest.coverage" NAME="svmtest Coverage Results" MODIFIED="1539027933178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -60,13 +61,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="322">
+              <caret line="101" column="18" lean-forward="true" selection-start-line="101" selection-start-column="18" selection-end-line="101" selection-end-column="18" />
               <folding>
                 <element signature="e#34#67#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="draw-test.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/draw-test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="489">
+              <caret line="98" column="32" lean-forward="true" selection-start-line="98" selection-start-column="32" selection-end-line="98" selection-end-column="32" />
+              <folding>
+                <element signature="e#2170#2188#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,8 +88,8 @@
       <file leaf-file-name="nerualNetwork.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nerualNetwork.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="938">
-              <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
+            <state relative-caret-position="966">
+              <caret line="72" column="11" selection-start-line="72" selection-start-column="11" selection-end-line="72" selection-end-column="11" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -96,20 +109,11 @@
       <file leaf-file-name="navieBayes.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/navieBayes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="938">
+            <state relative-caret-position="382">
               <caret line="69" column="43" selection-start-line="69" selection-start-column="43" selection-end-line="69" selection-end-column="43" />
               <folding>
                 <element signature="e#91#109#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fucntion.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fucntion.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="445" lean-forward="true" selection-start-line="445" selection-end-line="445" />
             </state>
           </provider>
         </entry>
@@ -148,6 +152,7 @@
       <find>knn</find>
       <find>getCategoryForBayes</find>
       <find>fileob</find>
+      <find>drawCdf</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -173,6 +178,7 @@
         <option value="$PROJECT_DIR$/navieBayes.py" />
         <option value="$PROJECT_DIR$/fucntion.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/draw-test.py" />
       </list>
     </option>
   </component>
@@ -186,9 +192,9 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="786" />
-    <option name="width" value="819" />
-    <option name="height" value="869" />
+    <option name="x" value="785" />
+    <option name="width" value="820" />
+    <option name="height" value="870" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -236,7 +242,26 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.draw-test">
+    <configuration name="draw-test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="test" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draw-test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="kmean" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="test" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -318,9 +343,11 @@
       <item itemvalue="Python.main" />
       <item itemvalue="Python.kmean" />
       <item itemvalue="Python.nerualNetwork" />
+      <item itemvalue="Python.draw-test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.draw-test" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.nerualNetwork" />
         <item itemvalue="Python.kmean" />
@@ -388,7 +415,14 @@
       <option name="project" value="LOCAL" />
       <updated>1539701769375</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="无需理会，中间版本">
+      <created>1540479714104</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1540479714104</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -407,14 +441,15 @@
       <window_info anchor="bottom" id="TODO" order="5" sideWeight="0.49932975" weight="0.32956153" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50469166" side_tool="true" weight="0.3281471" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4953083" weight="0.33097595" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4953083" weight="0.12446959" />
       <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.65683645" weight="0.18811882" />
-      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.49731904" weight="0.27439886" />
+      <window_info active="true" anchor="bottom" id="Run" order="13" sideWeight="0.49731904" visible="true" weight="0.18670438" />
       <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49932975" weight="0.32956153" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49408284" visible="true" weight="0.15549597" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49408284" visible="true" weight="0.16018766" />
       <window_info anchor="bottom" id="Docker" order="6" show_stripe_button="false" weight="0.32956153" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="3" sideWeight="0.9395248" weight="0.25201073" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32956153" />
+      <window_info anchor="right" id="SciView" order="3" sideWeight="0.9395248" weight="0.7158177" />
       <window_info id="Structure" order="1" sideWeight="0.50591713" side_tool="true" weight="0.72319037" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="2" sideWeight="0.49865952" weight="0.34512022" />
@@ -426,7 +461,6 @@
       <window_info anchor="bottom" id="Messages" order="7" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -474,7 +508,8 @@
     <MESSAGE value="修改svm分类为所有的数据项；&#10;但是还是保留了概率，权重。" />
     <MESSAGE value="增加神经网络" />
     <MESSAGE value="暂时取消kmeans++计划；&#10;svm概率比如los nlos los （1）&#10;接着计算 nlos los nlos(2)&#10;两种概率计算" />
-    <option name="LAST_COMMIT_MESSAGE" value="暂时取消kmeans++计划；&#10;svm概率比如los nlos los （1）&#10;接着计算 nlos los nlos(2)&#10;两种概率计算" />
+    <MESSAGE value="无需理会，中间版本" />
+    <option name="LAST_COMMIT_MESSAGE" value="无需理会，中间版本" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -483,6 +518,11 @@
           <url>file://$PROJECT_DIR$/nerualNetwork.py</url>
           <line>36</line>
           <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>92</line>
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -495,7 +535,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="68" />
+      <option name="time" value="71" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -577,19 +617,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/nerualNetwork.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
-          <folding>
-            <element signature="e#34#67#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/svm.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -792,13 +819,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draw-test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -829,8 +849,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/nerualNetwork.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="938">
-          <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
+        <state relative-caret-position="966">
+          <caret line="72" column="11" selection-start-line="72" selection-start-column="11" selection-end-line="72" selection-end-column="11" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -844,9 +864,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fucntion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4">
+          <caret line="280" column="4" selection-start-line="280" selection-start-column="4" selection-end-line="280" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/navieBayes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="938">
+        <state relative-caret-position="382">
           <caret line="69" column="43" selection-start-line="69" selection-start-column="43" selection-end-line="69" selection-end-column="43" />
           <folding>
             <element signature="e#91#109#0" expanded="true" />
@@ -854,19 +881,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fucntion.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="445" lean-forward="true" selection-start-line="445" selection-end-line="445" />
+        <state relative-caret-position="322">
+          <caret line="101" column="18" lean-forward="true" selection-start-line="101" selection-start-column="18" selection-end-line="101" selection-end-column="18" />
+          <folding>
+            <element signature="e#34#67#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/Mymethod-wknn.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Mymethod-knn.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw-test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+        <state relative-caret-position="489">
+          <caret line="98" column="32" lean-forward="true" selection-start-line="98" selection-start-column="32" selection-end-line="98" selection-end-column="32" />
           <folding>
-            <element signature="e#34#67#0" expanded="true" />
+            <element signature="e#2170#2188#0" expanded="true" />
           </folding>
         </state>
       </provider>
