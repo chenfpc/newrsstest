@@ -48,7 +48,7 @@ def print_simulate_svm_score():
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.metrics import accuracy_score
-    dataFileName = r'D:\范师兄材料\data\1.mat'
+    dataFileName = r'C:\Users\chenf\Desktop\1.mat'
     originalData = sio.loadmat(dataFileName)["tempx"]
     label = []
 
@@ -88,9 +88,9 @@ def print_simulate_svm_score():
 
     label = np.array(label)
 
-    trainData, testData, trainLabel, testLabel = train_test_split(newData, label, train_size=0.8)
+    # trainData, testData, trainLabel, testLabel = train_test_split(newData, label, train_size=0.8)
     clf = svm.SVC( probability=True) #直接使用的是5G的信号，因为5G对nlos影响很大，所以判别很明显
-    clf.fit(trainData, trainLabel)
+    clf.fit(newData, label)
     #result = clf.predict(testData)
     #score = accuracy_score(testLabel, result)
     return clf

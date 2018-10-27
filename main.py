@@ -80,30 +80,29 @@ clusters=[]
 # r = k.all_kalman_filter(h_testAll)
 # 自己写的结束
 # cluster-knn(包括knn和wknn),kmeans-knn/wknn
-bayes = byes.NaiveBayesContinuous()
-x1 = []
-x2 = []
-for i in range(70):
-    result = f.runRealityClusterKnn(6,originalTrainingSet, originalTestingSet, originalTestingSet,
-                           cordinaryAllSet, cordinaryTestSet, classfication, clusters, 1, clf, bayes)
-    x1.append(result[0])
-    x2.append(result[1])
-x1 = np.array(x1)
-
-index1 = x1.argsort()
-print(x1[index1[0]])
-cdf = x2[index1[0]]
-print(cdf)
-cdf = np.array(cdf)
-fileObject = open(BASE_URL + "cdf_myMethod_Knumber_wKNN_6.txt", "w")
-for i in range(len(cdf)):
-    fileObject.write(str(cdf[i]))
-    fileObject.write("\n")
-fileObject.close()
+# bayes = byes.NaiveBayesContinuous()
+# x1 = []
+# x2 = []
+# for i in range(70):
+#     result = f.runRealityClusterKnn(6,originalTrainingSet, originalTestingSet, originalTestingSet,
+#                            cordinaryAllSet, cordinaryTestSet, classfication, clusters, 1, clf, bayes)
+#     x1.append(result[0])
+#     x2.append(result[1])
+# x1 = np.array(x1)
+#
+# index1 = x1.argsort()
+# print(x1[index1[0]])
+# cdf = x2[index1[0]]
+# print(cdf)
+# cdf = np.array(cdf)
+# fileObject = open(BASE_URL + "cdf_myMethod_Knumber_wKNN_6.txt", "w")
+# for i in range(len(cdf)):
+#     fileObject.write(str(cdf[i]))
+#     fileObject.write("\n")
+# fileObject.close()
 # knn
 # f.runKnnRealityKNN(trainingSet, testingSet, cordinaryAllSet, cordinaryTestSet, 5, 0)          # 调用了函数！！！！！！！！！！！！！！！！！！！！！！
 
-'''
 
 # 以下是仿真的代码！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 
@@ -122,15 +121,26 @@ trainData_5 = sio.loadmat(simulate_Train_5_Filename)["tempx"]
 alldistance = sio.loadmat(simulate_Test_2_4_Filename)["distance"]
 
 originalTrainingSet = np.concatenate((trainData_2_4, trainData_5), axis=1)
-originalTestingSet = np.concatenate((testData_2_4, testData_5), axis=1)
+#originalTestingSet = np.concatenate((testData_2_4, testData_5), axis=1)
 simulatClassfication = f_sim.runClassfication_Simulate(originalTrainingSet, alldistance)          #调用了函数！！！！！！！！！！！！！！！！！！！！！！
-testData = f_sim.selectTestSet(originalTestingSet, alldistance, 40)                                #调用了函数！！！！！！！！！！！！！！！！！！！！！！
-
+# testData = f_sim.selectTestSet(originalTestingSet, alldistance, 40)                                #调用了函数！！！！！！！！！！！！！！！！！！！！！！
+trainSet,testSet,trainDis,testDis = train_test_split(originalTrainingSet,alldistance,train_size=0.98)
 clf_simulate = svm.print_simulate_svm_score()                                                    #调用了函数！！！！！！！！！！！！！！！！！！！！！！
-f_sim.runSimulateClusterKnn(testData[0], testData[0], testData[1], simulatClassfication,0,clf_simulate)            #调用了函数！！！！！！！！！！！！！！！！！！！！！！
-# f_sim是什么！！！！！！！！！！！！！
+bayes = byes.NaiveBayesContinuous()
 
-'''
+result  = f_sim.runRealityClusterKnn(6,trainSet, testSet,testSet,trainDis,testDis,simulatClassfication,clusters,1,clf_simulate,bayes)
+cdf = result[1]
+print(cdf)
+cdf = np.array(cdf)
+fileObject = open(BASE_URL + "cdf_simulate_myMethod_wKNN.txt", "w")
+for i in range(len(cdf)):
+    fileObject.write(str(cdf[i]))
+    fileObject.write("\n")
+fileObject.close()
+
+
+
+
 
 
 

@@ -185,7 +185,9 @@ def runCluster(dataSet, numbers):
     return dataTag, centroid
 
 
-def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet, classfication,clusters,ifweight,clf):
+def runRealityClusterKnn(k, trainingSet, testingSet, originalTestingSet, cordinaryAllSet, cordinaryTestSet,
+                         classfication,
+                         clusters, ifweight, clf, bayes):
     """
     :param trainingSet: 归一化后的训练集
     :param testingSet:  归一化后的测试机
@@ -197,11 +199,15 @@ def runRealityClusterKnn(trainingSet, testingSet, originalTestingSet, cordinaryA
     :param clf : 训练好的svmc模型
     :return:
     """
-    testingSet_cordinary = np.column_stack((testingSet, cordinaryTestSet))
-    result = clusterKNN(testingSet_cordinary, originalTestingSet, cordinaryTestSet, classfication,clusters,ifweight,clf)
+    # 选择给RSS加权重需要改变 testingSet
+    trainingByesData = []
+    testingSet_cordinary = np.column_stack((testingSet, cordinaryTestSet))  # 将RSS值和位置信息合并在一起
+    result = clusterRealityKNN(k, testingSet_cordinary, trainingByesData, originalTestingSet, cordinaryTestSet, classfication,
+                        clusters, ifweight,
+                        clf, bayes)
     print("平均误差为")
     print(result[0])
-    return result[1]
+    return result
 
 def runSimulateClusterKnn(testingSet, originalTestingSet,cordinaryTestSet, classfication, ifweight, clf):
     testingSet_cordinary = np.column_stack((testingSet, cordinaryTestSet))
@@ -246,6 +252,150 @@ def judge(testPoint):
             result = "E"
     return result
 
+def clusterRealityKNN(k, testData, trainingByesData, originalTestSet, positions_test, classfication, clusters, ifweight, clf,
+               bayes):
+    """
+    聚类KNN或者wknn
+    :param testData: 训练集，包含数据和坐标（处理好的数据）
+    :param originalTestSet: 未处理的测试集
+    :param positions_test:  测试坐标
+    :param classfication: 聚类结果
+    :param clusters: 每个子区域的kmean后的结果
+    :param ifweight: 是否wknn
+    :param clf: smvc训练出的模型
+    :return:
+    """
+    cdf = []
+    index = 0
+    error = 0
+    len1 = len(positions_test)
+    # 新建一个predict_cordinary保存预测的坐标值
+    predict_cordinary = [None] * len1
+    # fileObject = open(r"C:\Users\computer\Desktop\cdf_best.txt", "w")
+    for i in range(len1):
+        print(i)
+        which_class = judgeCluster_Simulate(originalTestSet[i][:], classfication)  # 这里判断出子区域是哪一个，是A、B、C、D等，每一行都是（2.4g,5g)这样的特征值。
+        class_data = (which_class[0])[0]  # 对应子区域中的所有数据
+
+
+        #判断该点处于何种环境
+        flag_wifi1 = clf.predict(originalTestSet[i][12:16].reshape(1,-1))
+        flag_wifi2 = clf.predict(originalTestSet[i][16:20].reshape(1,-1))
+        flag_wifi3 = clf.predict(originalTestSet[i][20:24].reshape(1,-1))
+
+        #根据NLOS的状态取不同的值
+        if flag_wifi1 == 1:  #1对应los
+            w1 = 12
+        else:
+            w1 = 0
+        if flag_wifi2 == 1:  #1对应los
+            w2 = 16
+        else:
+            w2 = 4
+        if flag_wifi3 == 1:  # 1对应los
+            w3 = 20
+        else:
+            w3 = 8
+
+        # # 判断该点处于何种环境
+        # flag_wifi1 = np.array(
+        #     clf.predict_proba(originalTestSet[i][12:16].reshape(1, -1)))  # 使用5G，返回的是概率。0代表los, 1代表nlos
+        # flag_wifi2 = np.array(clf.predict_proba(originalTestSet[i][16:20].reshape(1, -1)))
+        # flag_wifi3 = np.array(clf.predict_proba(originalTestSet[i][20:24].reshape(1, -1)))
+        #
+        # proba_wifi1 = flag_wifi1[0][0]  # nlos概率
+        # proba_wifi2 = flag_wifi2[0][0]  # nlos概率
+        # proba_wifi3 = flag_wifi3[0][0]  # nlos概率
+        #
+        # # 根据NLOS的状态取不同的值
+        # if flag_wifi1[0][0] < 0.35:  # 1对应los, -1代表nlos
+        #     w1 = 12
+        #
+        # elif flag_wifi1[0][0] < 0.65:
+        #     tag, proby = bayes.predict(trainingByesData, originalTestSet[i][14:16])
+        #     if tag == -1:
+        #         w1 = 0
+        #     else:
+        #         w1 = 12
+        # else:
+        #     w1 = 0
+        #
+        # if flag_wifi2[0][0] < 0.35:  # 1对应los
+        #     w2 = 16
+        #
+        # elif flag_wifi2[0][0] < 0.65:
+        #     tag, proby = bayes.predict(trainingByesData, originalTestSet[i][18:20])
+        #     if tag == -1:
+        #         w2 = 4
+        #     else:
+        #         w2 = 16
+        # else:
+        #     w2 = 4
+        #
+        # if flag_wifi3[0][0] < 0.35:  # 1对应los
+        #     w3 = 20
+        #
+        # elif flag_wifi3[0][0] < 0.65:
+        #     tag, proby = bayes.predict(trainingByesData, originalTestSet[i][22:24])
+        #     if tag == -1:
+        #         w3 = 8
+        #     else:
+        #         w3 = 20
+        # else:
+        #     w3 = 8
+
+        metric = [w1, w2, w3, 24, 25]
+        dataSet = class_data[:, metric]  # 将4*6的长度转为3，对不同的nlos状态找不同的2.4还是5g信号
+        metric_testpoint = [w1, w2, w3, 24, 25]  # 取
+        testPoint = testData[i, metric_testpoint]  # 测试点
+
+        numbers = 5
+        cluster = numbers
+        centroids = kmeans(dataSet[:, :-2], cluster)[0]
+        dataTag = [list() for i in range(cluster)]
+        # 使用vq函数根据聚类中心对所有数据进行分类,vq的输出也是两维的,[0]表示的是所有数据的label
+        label = vq(dataSet[:, :-2], centroids)[0]
+        for j in range(len(dataSet[:, :-2])):
+            dataTag[label[j]].append(dataSet[j])
+        # numbers = 5;
+        #
+        # label,centroids = kmeans(dataSet[:,:-2],numbers)
+        # dataTag = [list() for i in range(numbers)]
+        # for j in range(len(dataSet[:,:-2])):
+        #     dataTag[label[j]].append(dataSet[j])
+        """
+        #获取cluster
+        clusterData = clusters[label[1]]
+        centroids = clusterData[1]
+        datas = clusterData[0]
+        """
+        index = 0
+        temp = 100000
+        for j in range(len(centroids)):
+            sub = testPoint[:-2] - centroids[j]
+            differ = sub ** 2
+            # print("DIFFER",differ)
+            result = differ.sum(axis=0)
+            if result < temp:
+                temp = result
+                index = j
+
+        data = dataTag[index]
+
+        # 这里直接把data = label[0]
+        # data = (label[0])[0] #labell=[0]直接返回的是子区域中的所有点，而clusters代表的是这个子区域中的所有聚类。
+        result = calculateCordinary(k, data, testPoint, i, positions_test, ifweight, originalTestSet[i][:])
+        # print(result[0])
+        x = result[0]
+        cdf.append(x)
+        # if result[0] > 4.5:
+        #     x = random.randint(1,10)*0.5
+        # fileObject.write(str(x))
+        # fileObject.write("\n")
+        error = error + result[0]
+        predict_cordinary[i] = result[1]
+        # fileObject.close()
+    return error / len(positions_test), cdf
 
 def clusterKNN(testData, originalTestSet, positions_test, classfication,ifweight,clf):
     """
