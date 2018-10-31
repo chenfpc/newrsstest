@@ -95,7 +95,7 @@ def drawLines(txtUrl, style, descrp):
 # drawLines("cdf_myMethod_Knumber_wKNN_4.txt","--y*",'wknn,k=4')
 # drawLines("cdf_myMethod_Knumber_wKNN_5.txt","--r*",'wknn,k=5')
 # drawLines("cdf_myMethod_Knumber_wKNN_6.txt","--b+",'wknn,k=6')
-# plt.savefig("Mymethod-wknn.png")
+
 # plt.title("wknn,when k=3,4,5,6")
 #knn , k取值
 # drawLines("cdf_myMethod_Knumber_KNN_3.txt","--g+",'wknn,k=3')
@@ -105,8 +105,14 @@ def drawLines(txtUrl, style, descrp):
 # plt.savefig("Mymethod-knn.png")
 # plt.title("knn,when k=3,4,5,6")
 
-drawLines("cdf_simulate_myMethod_wKNN.txt","--g+","myMethod with wknn")
-drawLines("cdf_simulate_myMethod_KNN.txt","--b+","myMethod with knn")
+# drawLines("cdf_simulate_myMethod_wKNN.txt","--g+","myMethod with wknn")
+# drawLines("cdf_simulate_myMethod_KNN.txt","--b+","myMethod with knn")
+
+drawLines("cdf_knn_4.txt","-k+","knn")
+drawLines("cdf_wknn_5.txt","--b+","wknn")
+drawLines("cdf_best.txt","-r+","my method")
+drawLines("cdf_clusterknn.txt","--y+","cluster-knn")
+
 plt.xlabel("location error（m)")
 plt.ylabel("CDF")
 plt.legend()
@@ -117,4 +123,5 @@ plt.xlim([0,8])
 plt.ylim([0,1])
 plt.xticks(x_ticks)
 plt.yticks(y_ticks)
+plt.savefig("cdf_comparision.png")
 plt.show()
